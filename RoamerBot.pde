@@ -41,7 +41,7 @@ long mesure_range()
   pinMode(pingPin, INPUT);
   duration = pulseIn(pingPin, HIGH);  
   
-  cm = microsecondsToCentimeters(duration);
+  cm = duration / 29 / 2;
   Serial.print("Range: ");
   Serial.print(cm);
   Serial.print("cm");
@@ -50,12 +50,28 @@ long mesure_range()
   return cm;
 }
 
-long microsecondsToCentimeters(long microseconds)
+void forward()
 {
-  // The speed of sound is 340 m/s or 29 microseconds per centimeter.
-  // The ping travels out and back, so to find the distance of the
-  // object we take half of the distance travelled.
-  return microseconds / 29 / 2;
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
+}
+
+void backward()
+{
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(BACKWARD);
+  motor4.run(BACKWARD);
+}
+
+void stop()
+{
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  motor4.run(RELEASE);
 }
 
 void loop()
