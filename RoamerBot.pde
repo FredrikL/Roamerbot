@@ -1,5 +1,14 @@
 #include <AFMotor.h>
 #include <Servo.h>
+/*
+
+Motor layout
+^
+34
+21
+
+*/
+
 
 /* Misc global stuff*/
 Servo pingServo;
@@ -72,6 +81,22 @@ void stop()
   motor2.run(RELEASE);
   motor3.run(RELEASE);
   motor4.run(RELEASE);
+}
+
+void left()
+{
+  motor1.run(FORWARD);
+  motor2.run(BACKWARD);
+  motor3.run(BACKWARD);
+  motor4.run(FORWARD);
+}
+
+void right()
+{
+  motor1.run(BACKWARD);
+  motor2.run(FORWARD);
+  motor3.run(FORWARD);
+  motor4.run(BACKWARD);
 }
 
 void loop()
