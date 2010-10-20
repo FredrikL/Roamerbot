@@ -1,14 +1,11 @@
 #include <AFMotor.h>
 #include <Servo.h>
 /*
-
 Motor layout
 ^
 34
 21
-
 */
-
 
 /* Misc global stuff*/
 Servo pingServo;
@@ -17,12 +14,19 @@ AF_DCMotor motor2(2, MOTOR12_64KHZ);
 AF_DCMotor motor3(3, MOTOR12_64KHZ);
 AF_DCMotor motor4(4, MOTOR12_64KHZ);
 const int pingPin = 2;
+int pos = 90; // servo position - forward
+long action_trigger_range = 100; // when start some kind of action to move around
+
+/* sensor result */
+long distance;
+
 
 void setup()
 {
   Serial.begin(9600);
   
   pingServo.attach(10);
+  pingServo.write(90);
   
   motor1.setSpeed(200);
   motor2.setSpeed(200);
@@ -34,7 +38,7 @@ long mesure_range()
 {
   // Ripped code from http://www.arduino.cc/en/Tutorial/Ping
   
-    long duration, inches, cm;
+  long duration, cm;
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
   // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
   pinMode(pingPin, OUTPUT);
@@ -99,5 +103,27 @@ void right()
   motor4.run(BACKWARD);
 }
 
+void sensor_sweep()
+{
+  pingServo.write(90);
+  delay(10000);
+  pingServo.write(180);
+  delay(10000);
+}
+
 void loop()
-{}
+{
+ // sensor_sweep();
+ forward();
+ delay(10000);
+ left();
+ delay(5000);
+ forward();
+ delay(5000);
+ right();
+ delay(5000);
+ backward();
+ delay(5000);
+ stop();
+ delay(10000);
+}
