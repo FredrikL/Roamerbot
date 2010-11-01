@@ -113,17 +113,37 @@ void sensor_sweep()
 
 void loop()
 {
- // sensor_sweep();
- forward();
- delay(10000);
- left();
- delay(5000);
- forward();
- delay(5000);
- right();
- delay(5000);
- backward();
- delay(5000);
- stop();
- delay(10000);
+  long range = mesure_range();
+  if(range > 50)
+  {
+    forward();
+  }
+  else 
+  {
+    // mesure range left/right
+    pingServo.write(45);
+    long range_left = mesure_range();
+    pingServo.write(135);
+    long range_right = mesure_range();
+    pingServo.write(90);
+    if(range_left < 50 & range_right < 50)
+    {
+      backward();
+    }
+    else
+    {
+      if(range_left > range_right)
+      {
+        left();
+        delay(1000);
+      }
+      else
+      {
+        right();
+        delay(1000);
+      }
+    }
+  }
+  
+  delay(500); // 0.5 sec
 }
