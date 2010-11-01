@@ -20,7 +20,6 @@ long action_trigger_range = 100; // when start some kind of action to move aroun
 /* sensor result */
 long distance;
 
-
 void setup()
 {
   Serial.begin(9600);
@@ -103,14 +102,6 @@ void right()
   motor4.run(RELEASE);
 }
 
-void sensor_sweep()
-{
-  pingServo.write(90);
-  delay(10000);
-  pingServo.write(180);
-  delay(10000);
-}
-
 void loop()
 {
   long range = mesure_range();
@@ -122,13 +113,16 @@ void loop()
   {
     // mesure range left/right
     pingServo.write(45);
+    delay(500);
     long range_left = mesure_range();
     pingServo.write(135);
+    delay(500);
     long range_right = mesure_range();
     pingServo.write(90);
     if(range_left < 50 & range_right < 50)
     {
       backward();
+      delay(1000);
     }
     else
     {
