@@ -27,10 +27,10 @@ void setup()
   pingServo.attach(10);
   pingServo.write(90);
   
-  motor1.setSpeed(200);
-  motor2.setSpeed(200);
-  motor3.setSpeed(200);
-  motor4.setSpeed(200);
+  motor1.setSpeed(150);
+  motor2.setSpeed(150);
+  motor3.setSpeed(150);
+  motor4.setSpeed(150);
 }
 
 long mesure_range()
@@ -113,31 +113,31 @@ void loop()
   {
     // mesure range left/right
     pingServo.write(45);
-    delay(500);
+    delay(400);
     long range_left = mesure_range();
     pingServo.write(135);
-    delay(500);
+    delay(400);
     long range_right = mesure_range();
     pingServo.write(90);
     if(range_left < 50 & range_right < 50)
     {
       backward();
-      delay(1000);
+      delay(2000);
     }
     else
     {
       if(range_left > range_right)
       {
         left();
-        delay(1000);
+        delay(1500);
       }
       else
       {
         right();
-        delay(1000);
+        delay(1500);
       }
     }
   }
   
-  delay(500); // 0.5 sec
+  delay(150); // 0.5 sec
 }
