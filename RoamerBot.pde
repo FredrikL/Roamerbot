@@ -15,10 +15,9 @@ AF_DCMotor motor3(3, MOTOR12_64KHZ);
 AF_DCMotor motor4(4, MOTOR12_64KHZ);
 const int pingPin = 2;
 int pos = 90; // servo position - forward
-long action_trigger_range = 100; // when start some kind of action to move around
 
 /* sensor result */
-long distance;
+long distance, range, result;
 
 void setup()
 {
@@ -35,9 +34,14 @@ void setup()
 
 long mesure_range()
 {
+  // sometimes we get odd vaules, to avoid do 3x readings and return average
+  long result = mesure_range_singel() + mesure_range_singel() +mesure_range_singel();
+  return result / 3;
+}
+
+long mesure_range_singel()
+{
   // Ripped code from http://www.arduino.cc/en/Tutorial/Ping
-  
-  long duration, cm;
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
   // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
   pinMode(pingPin, OUTPUT);
@@ -51,10 +55,10 @@ long mesure_range()
   // pulse whose duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
   pinMode(pingPin, INPUT);
-  duration = pulseIn(pingPin, HIGH);  
+  long duration = pulseIn(pingPin, HIGH);  
+  long cm =duration / 29 / 2;
   
-  cm = duration / 29 / 2;
-  Serial.print("Range: ");
+ Serial.print("Range: ");
   Serial.print(cm);
   Serial.print("cm");
   Serial.println();
@@ -64,6 +68,7 @@ long mesure_range()
 
 void forward()
 {
+  Serial.println("forward");
   motor1.run(FORWARD);
   motor2.run(FORWARD);
   motor3.run(FORWARD);
@@ -72,6 +77,7 @@ void forward()
 
 void backward()
 {
+  Serial.println("back");
   motor1.run(BACKWARD);
   motor2.run(BACKWARD);
   motor3.run(BACKWARD);
@@ -88,6 +94,7 @@ void stop()
 
 void left()
 {
+  Serial.println("left");
   motor1.run(FORWARD);
   motor2.run(RELEASE);
   motor3.run(RELEASE);
@@ -96,6 +103,7 @@ void left()
 
 void right()
 {
+  Serial.println("right");
   motor1.run(RELEASE);
   motor2.run(FORWARD);
   motor3.run(FORWARD);
@@ -104,13 +112,18 @@ void right()
 
 void loop()
 {
-  long range = mesure_range();
+  range = mesure_range();
+  Serial.print("Range: ");
+  Serial.print(range);
+  Serial.print("cm");
+  Serial.println();
   if(range > 50)
   {
+    Serial.print("Forward!");
     forward();
   }
   else 
-  {
+  { 
     // mesure range left/right
     pingServo.write(45);
     delay(400);
@@ -123,6 +136,16 @@ void loop()
     {
       backward();
       delay(2000);
+      result = random(2);
+      if(result == 1)
+      {
+        left();
+        delay(1000);
+      }
+      else{
+        right();
+        delay(1000);
+      }
     }
     else
     {
@@ -139,5 +162,5 @@ void loop()
     }
   }
   
-  delay(150); // 0.5 sec
+  delay(150);
 }
