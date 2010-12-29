@@ -117,7 +117,7 @@ void loop()
   Serial.print(range);
   Serial.print("cm");
   Serial.println();
-  if(range > 50)
+  if(range > 70)
   {
     Serial.print("Forward!");
     forward();
